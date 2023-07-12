@@ -6,39 +6,16 @@ from starlette.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
-
+from fastapi.responses import FileResponse
+import sqlite3
+import re
 model = AutoModelForCausalLM.from_pretrained("cyberagent/open-calm-small", device_map="auto", torch_dtype=torch.float16)
 tokenizer = AutoTokenizer.from_pretrained("cyberagent/open-calm-small")
 
-app = FastAPI()
+# model = AutoModelForCausalLM.from_pretrained("cyberagent/open-calm-7b", device_map="auto", torch_dtype=torch.float16)
+# tokenizer = AutoTokenizer.from_pretrained("cyberagent/open-calm-7b")
 
-app.add_middleware(
-    CORSMiddleware,
-    # allow_origins=["*"],
-    allow_origins=[
-        "https://api.tomoaki-ohkawa.com",
-        "https://api.tomoaki-ohkawa.com/chat1",
-        "https://api.tomoaki-ohkawa.com/chat2",
-        "https://api.tomoaki-ohkawa.com/chat3",
-        "https://api.tomoaki-ohkawa.com/chat4",
-        "https://api.tomoaki-ohkawa.com/chat5",
-        "https://api.tomoaki-ohkawa.com/chat6",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
-)
-
-class Question(BaseModel):
-    question: str
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-@app.post("/ask")
-def ask_question(question: Question):
+def get_ans(question):
     inputs = tokenizer(str(question), return_tensors="pt").to(model.device)
     with torch.no_grad():
         tokens = model.generate(
@@ -51,10 +28,57 @@ def ask_question(question: Question):
             pad_token_id=tokenizer.pad_token_id,
         )
         
-    output = tokenizer.decode(tokens[0], skip_special_tokens=True)
-    # response = index.query(llm=llm, question=question.question)
-    # res = llm(response+"/n"+"/n"+"上のテキスト情報の出力がキリが悪いので，キリをよくしてください.なお，高校生でもわかりやすい出力をしてください")
-    # max_length = 200  # 任意の最大文字数を設定
-    # shortened_response = response[:max_length]
-    return {"answer": output}
-    # return {"answer": res}
+    ans = tokenizer.decode(tokens[0], skip_special_tokens=True)
+    return ans
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    # allow_origins=["*"],
+    allow_origins=[
+        "https://api.tomoaki-ohkawa.com",
+        "https://api.tomoaki-ohkawa.com/chat1",
+        "https://api.tomoaki-ohkawa.com/chat2",
+        "https://api.tomoaki-ohkawa.com/chat3",
+        "https://api.tomoaki-ohkawa.com/chat4",
+        "https://api.tomoaki-ohkawa.com/chat5",
+        "https://api.tomoaki-ohkawa.com/chat5/",
+        "https://api.tomoaki-ohkawa.com/chat6",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
+
+class Question(BaseModel):
+    # user: str
+    question: str
+
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+@app.post("/ask")
+def ask_question(question: Question):
+    ans = get_ans(question)
+    ans = re.sub(r'\);.*$', '', ans)
+    print(ans)
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    data = {"user": "tomo", "question": question.question, "answer": ans}
+
+    c.execute('''
+        INSERT INTO questions (user, question, answer)
+        VALUES (:user, :question, :answer)
+    ''', data)
+
+    conn.commit()
+    conn.close()
+    
+    return {"answer": ans}
+
+@app.get("/asuka")
+async def get_imges():
+    image_path = "./data/asuka.png"
+    return FileResponse(image_path, media_type="image/png") 
