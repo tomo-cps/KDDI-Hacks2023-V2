@@ -104,7 +104,7 @@ export default {
       // 追加デバック
       axios.defaults.withCredentials = true;
       // FastAPIサーバーにHTTP POSTリクエストを送信
-      const response = await axios.post('http://localhost:8085/ask', { question: this.message });
+      const response = await axios.post('https://gmc.cps.akita-pu.ac.jp/ask/', { question: this.message });
 
       // サーバーからの応答をメッセージとして追加
       this.messages.push({
