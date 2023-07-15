@@ -15,11 +15,11 @@ from janome.tokenizer import Tokenizer
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-model = AutoModelForCausalLM.from_pretrained("cyberagent/open-calm-small", device_map="auto", torch_dtype=torch.float16)
-tokenizer = AutoTokenizer.from_pretrained("cyberagent/open-calm-small")
+# model = AutoModelForCausalLM.from_pretrained("cyberagent/open-calm-small", device_map="auto", torch_dtype=torch.float16)
+# tokenizer = AutoTokenizer.from_pretrained("cyberagent/open-calm-small")
 
-# model = AutoModelForCausalLM.from_pretrained("cyberagent/open-calm-7b", device_map="auto", torch_dtype=torch.float16)
-# tokenizer = AutoTokenizer.from_pretrained("cyberagent/open-calm-7b")
+model = AutoModelForCausalLM.from_pretrained("cyberagent/open-calm-7b", device_map="auto", torch_dtype=torch.float16)
+tokenizer = AutoTokenizer.from_pretrained("cyberagent/open-calm-7b")
 
 class CreateWordCloud():
     def __init__(self, path, user, question):
