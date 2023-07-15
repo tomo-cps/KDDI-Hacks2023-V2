@@ -3,7 +3,9 @@ from wordcloud import WordCloud
 from janome.tokenizer import Tokenizer
 import matplotlib.pyplot as plt
 import re
+import torch
 from datetime import datetime
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 class CreateWordCloud():
     def __init__(self, path, user):
