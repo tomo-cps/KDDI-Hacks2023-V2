@@ -22,6 +22,12 @@ cursor.execute('''
     )
 ''')
 
+# デモデータを追加
+cursor.execute('''
+    INSERT INTO user_table (path, user, question, answer, wc_path)
+    VALUES ('chat5', 'とも', '機械学習ってなんですか', 'ニューラルネットワークを使っています．脳の構造を模したものです', '/path/to/wc')
+''')
+               
 # 変更をコミットして接続を閉じる
 conn.commit()
 conn.close()
