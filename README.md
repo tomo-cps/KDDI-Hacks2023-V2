@@ -30,9 +30,5 @@ docker run -it -p 8080:8080 --rm --name dockerize-vuejs-app-1 vuejs-docker
 ## Backend
 ### How to run
 ```
-pip install -r requirements.txt
-```
-
-```
-uvicorn main:app --port 8000
+bash run.sh
 ```
