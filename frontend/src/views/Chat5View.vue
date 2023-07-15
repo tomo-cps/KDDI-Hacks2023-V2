@@ -109,7 +109,6 @@ export default defineComponent({
   data() {
     return {
       imagePath: "",
-      // imagePath: '/images/asuka.png',
       name: "とも",
       message: "質問はここからどうぞ",
       messages: [],
