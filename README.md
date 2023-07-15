@@ -1,27 +1,22 @@
-# KDDIHacks2023-TeamA
-[KDDI ハッカソン 2023](https://techplay.jp/event/905493) に参加し，優秀賞を受賞したのでリポジトリを公開します！
+# KDDI-Hacks2023-v2
+公開してある[KDDI-Hacks2023のGitHub](https://github.com/tomo-cps/KDDI-Hacks2023)をオープンキャンパス用に完了しました．
 
-## Chat-Cloud
-テーマは「イベントの新しい楽しみ方をデザインしよう！」でした．私たちのチームは，学会や講義，プレゼンテーションの場面で，事前知識がなくて内容がわからない，質問ができないという課題に着目し，発表資料に最適化された ChatGPT を用いることでその課題を解決するプロダクト"Chat-Cloud"を開発しました．
+### ハッカソンとの差分
+- デプロイしました！
+  - nginx，proxy_passの設定など
+- 質問と回答を動的に取得し，WordCloudとして出力できるようにしました
+  - [聴講者] 質問活性化の狙い => 質の高い質問が生まれるようになる
+  - [発表者] どのような質問が多かったか視覚的にわかる => 発表の改善につながる
+- Chat画面をコンポーネント化し，管理しやすくしました
+- エンターで質問できないようにしました
+- 質問内容が空の時，送信ボタンの色が変わるようにしました
 
-### ユースケース
-![ユースケース](./demo/usecase.png)
+### デモ
 
-### システム構成図
-![システム構成](./demo/system.png)
+![デモ動画gif](./demo/sample_v2.gif)
 
-## 発表資料
 
-- [発表スライド](./demo/Ateam_slide.pdf)
-- [デモ動画](./demo/sample.mov)
 
-![デモ動画gif](./demo/sample_speedup.gif)
-
-## 実績
-
-- 優秀賞を受賞しました！ 🎉
-
-## Frontend
 ### How to run
 
 ```
@@ -39,5 +34,5 @@ pip install -r requirements.txt
 ```
 
 ```
-uvicorn main_fastapi:app --port 8085
+uvicorn main:app --port 8000
 ```
