@@ -3,7 +3,7 @@
     <v-col cols="5" class="my-6">
       <h2>2023年度 KDDIハッカソン学会 &nbsp; 会場:クサヤ温泉</h2>
       <v-card class="pa-2 my-6">
-        <v-img :src="imagePath" alt="WordCloud Image" />
+        <v-img :src="receivedImage" alt="WordCloud Image" v-if="receivedImage" />
         <v-card-title class="headline mb-0" style="white-space: pre-line;">
           Twitterにおける共通の関心を持つユーザのレコメンド
         </v-card-title>
@@ -28,161 +28,34 @@
       </v-card>
     </v-col>
     <v-col cols="5">
-      <v-app>
-        <v-main>
-          <v-container>
-            <v-row class="text-center">
-              <v-col cols="12">
-                <v-card class="mx-auto my-6" elevation="2" max-width="500" color="grey lighten-5">
-                  <v-card-title>Chat Bot</v-card-title>
-                  <v-divider></v-divider>
-                  <v-card-text><v-row>
-                      <v-col cols="12">
-                        <v-container ref="scrollTarget" style="height: 450px" class="overflow-y-auto">
-                          <v-row v-for="(msg, i) in messages" :key="i" dense>
-                            <v-col v-if="msg.ws_key != ws_key">
-                              <div class="balloon_l">
-                                <div class="face_icon">
-                                  <v-avatar :color="msg.avatar_color">
-                                    <span class="white--text">
-                                      {{ msg.name }}
-                                    </span>
-                                  </v-avatar>
-                                </div>
-                                <p class="says">
-                                  {{ msg.message }}
-                                </p>
-                              </div>
-                            </v-col>
-                            <v-col v-else>
-                              <div class="balloon_r">
-                                <div class="face_icon">
-                                  <v-avatar :color="msg.avatar_color">
-                                    <span class="white--text">
-                                      {{ msg.name }}
-                                    </span>
-                                  </v-avatar>
-                                </div>
-                                <p class="says">
-                                  {{ msg.message }}
-                                </p>
-                              </div>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
-                  <v-divider></v-divider>
-                  <v-card-text>
-                    <v-row>
-                      <v-col cols="3">
-                        <v-text-field label="名前" v-model="name" clearable></v-text-field>
-                      </v-col>
-                      <v-col>
-                        <v-text-field autofocus label="メッセージ" v-model="message" clearable
-                        :return-key="false" @input="updateButtonColor"></v-text-field>
-                      </v-col>
-                    </v-row>
-                    <v-btn class="info" small :color="buttonColor" @click="send_onClick">
-                      <v-icon>mdi-play</v-icon>送信
-                    </v-btn>
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-main>
-      </v-app>
+      <ChatPage @imageData="handleImageData" />
     </v-col>
   </v-row>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
-
-// Components
-import axios from 'axios';
+import ChatPage from '@/components/ChatPage.vue';
 
 export default defineComponent({
-  name: 'Chat1View',
+  name: 'Chat5View',
+  components: {
+    ChatPage,
+  },
   data() {
     return {
-      imagePath: "/images/hoge.png",
-      name: "とも",
-      message: "質問はここからどうぞ",
-      messages: [],
-      buttonColor: 'black',
-      ws_key: null,
-      avatar_color: "",
-      path: "",
+      receivedImage: "/images/hoge.png",
     };
-  },
-  created: function () {
-    // アバターの色をランダムに決める
-    let random_color = "#";
-    for (var i = 0; i < 6; i++) {
-      random_color += "0123456789abcdef"[(16 * Math.random()) | 0];
-    }
-    this.avatar_color = random_color;
-    const currentURL = window.location.href;
-    const regex = /\/([^/]+)$/;
-    const match = regex.exec(currentURL);
-    if (match && match.length > 1) {
-      const path = match[1];
-      this.path = path
-    }
   },
   mounted() {
   },
   methods: {
-    updateButtonColor() {
-      if (this.message.trim() !== '') {
-        this.buttonColor = 'black'; 
-      } else {
-        this.buttonColor = '#808080'; 
-      }
+    handleImageData(imageBinary) {
+      this.receivedImage = imageBinary;
     },
-    send_onClick: async function () {
-      if (this.message == "") return;
-      // ユーザのメッセージをチャットボックスに追加
-      this.messages.push({
-        ws_key: this.ws_key,
-        avatar_color: this.avatar_color,
-        message: this.message,
-        name: this.name,
-      });
-      axios.defaults.withCredentials = true;
-      // FastAPIサーバーにHTTP POSTリクエストを送信
-      axios
-        .post('https://gmc.cps.akita-pu.ac.jp/ask/', {
-          name: this.name,
-          path: this.path,
-          question: this.message,
-        })
-        .then((response) => {
-          this.messages.push({
-            ws_key: this.ws_key,
-            avatar_color: this.avatar_color,
-            message: response.data.answer,
-            name: 'Bot',
-          });
-          this.imagePath = 'data:image/png;base64,' + response.data.wordcloud;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-        this.message = '';
-      },
-    scrollToEnd() {
-      this.$nextTick(() => {
-        const chatLog = this.$refs.scrollTarget;
-        if (!chatLog) return;
-        chatLog.scrollTop = chatLog.scrollHeight;
-      });
-    },
-  },
-});
+  }
+}
+);
 </script>
 
 <style scoped>
