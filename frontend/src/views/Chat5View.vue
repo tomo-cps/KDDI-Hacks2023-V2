@@ -81,10 +81,10 @@
                       </v-col>
                       <v-col>
                         <v-text-field autofocus label="メッセージ" v-model="message" clearable
-                        :return-key="false"></v-text-field>
+                        :return-key="false" @input="updateButtonColor"></v-text-field>
                       </v-col>
                     </v-row>
-                    <v-btn class="info" small color="black" @click="send_onClick">
+                    <v-btn class="info" small :color="buttonColor" @click="send_onClick">
                       <v-icon>mdi-play</v-icon>送信
                     </v-btn>
                   </v-card-text>
@@ -112,6 +112,7 @@ export default defineComponent({
       name: "とも",
       message: "質問はここからどうぞ",
       messages: [],
+      buttonColor: 'black',
       ws_key: null,
       avatar_color: "",
       path: "",
@@ -135,6 +136,13 @@ export default defineComponent({
   mounted() {
   },
   methods: {
+    updateButtonColor() {
+      if (this.message.trim() !== '') {
+        this.buttonColor = 'black'; 
+      } else {
+        this.buttonColor = '#808080'; 
+      }
+    },
     send_onClick: async function () {
       if (this.message == "") return;
       // ユーザのメッセージをチャットボックスに追加
