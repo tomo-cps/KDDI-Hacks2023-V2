@@ -84,7 +84,7 @@
                         :return-key="false"></v-text-field>
                       </v-col>
                     </v-row>
-                    <v-btn class="info" small @click="send_onClick">
+                    <v-btn class="info" small color="black" @click="send_onClick">
                       <v-icon>mdi-play</v-icon>送信
                     </v-btn>
                   </v-card-text>
