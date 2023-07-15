@@ -1,5 +1,5 @@
 # KDDI-Hacks2023-v2
-公開してある[KDDI-Hacks2023のGitHub](https://github.com/tomo-cps/KDDI-Hacks2023)をオープンキャンパス用に完了しました．
+公開してある[KDDI-Hacks2023のGitHub](https://github.com/tomo-cps/KDDI-Hacks2023)をオープンキャンパス用に改良しました．
 
 ### ハッカソンとの差分
 - デプロイしました！
