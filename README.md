@@ -5,7 +5,7 @@
 - デプロイしました！
   - nginx，proxy_passの設定など
 - Azure OpenAI APIの代わりに[サイバーエージェント LLM](https://huggingface.co/cyberagent) を使ってなんとか代用しました．
-- バックエンドはGPUマシンで計算させ，フロントはCPUマシンで動いています．
+- バックエンドは GPU マシンで計算させ，フロントは CPU マシンで動いています．
   - マイクロサービス化
 - データベース(sqlite3)との連携をしました．
   - リダイレクト先，ユーザ名，質問，回答，WordCLoudのパスを保存
