@@ -28,7 +28,7 @@ CREATE TABLE user_table (
 - 質問内容が空の時，送信ボタンの色が変わるようにしました．
 
 ### デモ
-
+※ It takes a little time to load.
 ![デモ動画gif](./demo/sample_v2.gif)
 
 
